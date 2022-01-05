@@ -15,8 +15,6 @@ const Memory = () => {
     disabled: false,
     time: 0,
   });
-  const [time, setTime] = useState(0);
-
   // Start new game automagically:
   useEffect(() => {
     shuffleCards();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Timer from "../Timer/Timer.component";
 import "./StopWatch.style.css";
 
