@@ -1,0 +1,22 @@
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.digits {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.125rem;
+}
+
+@media (max-width: 600px) {
+  .digits {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .digits {
+    font-size: 0.75rem;
+  }
+}
