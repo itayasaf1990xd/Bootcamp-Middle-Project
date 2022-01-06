@@ -9,32 +9,31 @@ const Memory = () => {
   const [memory, setMemory] = useState({
     cards: [],
     turns: 0,
-    score: 0,
+    scores: 0,
     choiceOne: null,
     choiceTwo: null,
-    disabled: false,
+    isDisabled: false,
     time: 0,
+    isWon: false,
   });
-  // Start new game automagically:
-  useEffect(() => {
-    shuffleCards();
-  }, []);
-
   // Compare two selected cards:
   useEffect(() => {
+    if (!memory.cards.length) {
+      shuffleCards();
+    }
     if (memory.choiceOne && memory.choiceTwo) {
       setMemory((previousState) => {
         return {
           ...previousState,
-          disabled: true,
-          score: previousState.score - 50,
+          isDisabled: true,
+          scores: previousState.scores - 50,
         };
       });
       if (memory.choiceOne.src === memory.choiceTwo.src) {
         setMemory((previousState) => {
           return {
             ...previousState,
-            score: previousState.score + 150,
+            scores: previousState.scores + 150,
             cards: previousState.cards.map((card) => {
               if (card.src === memory.choiceOne.src) {
                 return { ...card, matched: true };
@@ -48,8 +47,28 @@ const Memory = () => {
       } else {
         setTimeout(() => resetTurn(), 1000);
       }
+    } else {
+      if (memory.turns >= 5) {
+        const winningStatus = memory.cards.every((card) => {
+          return card.matched === true;
+        });
+        if (winningStatus) {
+          setMemory((previousState) => {
+            return {
+              ...previousState,
+              isWon: true,
+            };
+          });
+        }
+      }
     }
-  }, [memory.choiceOne, memory.choiceTwo]);
+  }, [
+    memory.choiceOne,
+    memory.choiceTwo,
+    memory.cards,
+    memory.isWon,
+    memory.turns,
+  ]);
 
   // Shuffle cards for new game:
   const shuffleCards = () => {
@@ -61,10 +80,11 @@ const Memory = () => {
         ...previousState,
         choiceOne: null,
         choiceTwo: null,
-        score: 0,
+        scores: 0,
         cards: shuffledCards,
         turns: 0,
         time: 0,
+        isWon: false,
       };
     });
   };
@@ -89,7 +109,7 @@ const Memory = () => {
         ...previousState,
         choiceOne: null,
         choiceTwo: null,
-        disabled: false,
+        isDisabled: false,
         turns: previousState.turns + 1,
       };
     });
@@ -97,12 +117,16 @@ const Memory = () => {
 
   return (
     <div className="memory-card container">
-      <h1 className="title">Memory Card</h1>
+      <h1 className="title">Memory Cards</h1>
       <div className="tools">
-        <StopWatch time={memory.time} setTime={setMemory} />
+        <StopWatch
+          time={memory.time}
+          setTime={setMemory}
+          isWon={memory.isWon}
+        />
         <div className="turn">Turns: {memory.turns}</div>
-        <div className="score">Score: {memory.score}</div>
-        <Button text="New Game" shuffleCards={shuffleCards} />
+        <div className="score">Scores: {memory.scores}</div>
+        <Button text="New Game" onButtonClick={shuffleCards} />
       </div>
       <div className="cards">
         {memory.cards.map((card) => (
@@ -115,7 +139,7 @@ const Memory = () => {
               card === memory.choiceTwo ||
               card.matched
             }
-            disabled={memory.disabled}
+            isDisabled={memory.isDisabled}
           />
         ))}
       </div>

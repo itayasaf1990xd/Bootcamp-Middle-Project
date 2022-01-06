@@ -1,0 +1,15 @@
+.home.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+}
+
+.home.container .title {
+  margin: 0;
+}
+
+.home.container span.purple {
+  color: #7a41b3;
+}

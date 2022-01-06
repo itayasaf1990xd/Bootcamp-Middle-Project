@@ -13,3 +13,5 @@ export const cardImages = [
   { src: frontScroll, matched: false },
   { src: frontShield, matched: false },
 ];
+
+export const clearState = ["", "", "", "", "", "", "", "", "", ""];
